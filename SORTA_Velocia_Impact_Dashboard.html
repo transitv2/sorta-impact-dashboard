@@ -1,0 +1,1034 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SORTA x Velocia &mdash; Program Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1" integrity="sha384-jb8JQMbMoBUzgWatfe6COACi2ljcDdZQ2OxczGA3bGNeWe+6DChMTBJemed7ZnvJ" crossorigin="anonymous"></script>
+    <style>
+:root {
+    --bg: #f8fafc;
+    --card: #ffffff;
+    --dark: #0c1220;
+    --dark-mid: #1a2332;
+    --primary: #1a3a6b;
+    --primary-bright: #2563eb;
+    --primary-light: #eff6ff;
+    --success: #059669;
+    --success-light: #ecfdf5;
+    --warn: #d97706;
+    --danger: #dc2626;
+    --text: #0f172a;
+    --text-2: #475569;
+    --text-3: #94a3b8;
+    --border: #e2e8f0;
+    --shadow-sm: 0 1px 2px rgba(0,0,0,0.04);
+    --radius: 12px;
+    --radius-sm: 8px;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+}
+.page { max-width: 1200px; margin: 0 auto; padding: 32px 24px 48px; }
+
+/* ── HEADER ── */
+.hero {
+    background: linear-gradient(135deg, var(--dark) 0%, var(--dark-mid) 100%);
+    border-radius: var(--radius);
+    padding: 36px 44px 32px;
+    margin-bottom: 0;
+    position: relative;
+    overflow: hidden;
+}
+.hero::after {
+    content: '';
+    position: absolute;
+    top: -80px; right: -80px;
+    width: 300px; height: 300px;
+    background: radial-gradient(circle, rgba(37,99,235,0.10) 0%, transparent 70%);
+    border-radius: 50%;
+}
+.hero-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 28px;
+    position: relative;
+    z-index: 1;
+}
+.hero-brand-row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 12px;
+}
+.velocia-logo { height: 28px; opacity: 0.95; }
+.hero-divider { width: 1px; height: 24px; background: rgba(255,255,255,0.2); }
+.hero-brand-text {
+    font-size: 11px; font-weight: 600; text-transform: uppercase;
+    letter-spacing: 1.5px; color: #60a5fa;
+}
+.hero h1 { font-size: 26px; font-weight: 800; color: #fff; letter-spacing: -0.5px; line-height: 1.2; }
+.hero-sub { font-size: 14px; color: #94a3b8; margin-top: 4px; font-weight: 400; }
+.hero-badges { display: flex; gap: 10px; flex-shrink: 0; margin-top: 4px; }
+.badge { padding: 8px 16px; border-radius: 8px; font-size: 13px; font-weight: 700; letter-spacing: -0.2px; }
+.badge-roi { background: rgba(5,150,105,0.15); color: #34d399; }
+.badge-cost { background: rgba(255,255,255,0.08); color: #cbd5e1; }
+.hero-kpis {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px;
+    background: rgba(255,255,255,0.06); border-radius: var(--radius-sm);
+    overflow: hidden; position: relative; z-index: 1;
+}
+.hero-kpi { padding: 20px 24px; background: rgba(255,255,255,0.03); }
+.hero-kpi-val { font-size: 28px; font-weight: 800; color: #fff; letter-spacing: -0.5px; line-height: 1; }
+.hero-kpi-label { font-size: 11px; font-weight: 500; color: #94a3b8; margin-top: 6px; text-transform: uppercase; letter-spacing: 0.5px; }
+.hero-kpi-sub { font-size: 10px; color: #64748b; margin-top: 2px; }
+
+/* ── TAB NAVIGATION ── */
+.tab-nav {
+    background: var(--card); border: 1px solid var(--border); border-top: none;
+    border-radius: 0 0 var(--radius) var(--radius); padding: 0;
+    margin-bottom: 28px; display: flex; overflow: hidden;
+}
+.tab-btn {
+    flex: 1; padding: 16px 20px; border: none; background: transparent; cursor: pointer;
+    font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 600; color: var(--text-3);
+    display: flex; align-items: center; justify-content: center; gap: 10px;
+    transition: all 0.2s ease; position: relative; border-bottom: 3px solid transparent;
+}
+.tab-btn:not(:last-child) { border-right: 1px solid var(--border); }
+.tab-btn:hover { background: var(--primary-light); color: var(--text-2); }
+.tab-btn.active { background: var(--primary-light); color: var(--primary); border-bottom-color: var(--primary-bright); }
+.tab-num {
+    width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 700; background: var(--border); color: var(--text-3);
+    flex-shrink: 0; transition: all 0.2s ease;
+}
+.tab-btn.active .tab-num { background: var(--primary); color: #fff; }
+.tab-btn:hover .tab-num { background: var(--primary-bright); color: #fff; }
+
+/* ── SECTION PANELS ── */
+.section-panel { display: none; }
+.section-panel.active { display: block; }
+.section { margin-bottom: 0; }
+.section-header {
+    display: flex; align-items: center; gap: 12px;
+    margin-bottom: 20px; padding-bottom: 12px; border-bottom: 1px solid var(--border);
+}
+.section-num {
+    width: 28px; height: 28px; background: var(--primary); color: #fff; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; flex-shrink: 0;
+}
+.section-title { font-size: 17px; font-weight: 700; color: var(--text); letter-spacing: -0.3px; }
+.section-desc { font-size: 13px; color: var(--text-3); margin-left: auto; }
+
+/* ── GRIDS ── */
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+.grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+.grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 16px; }
+.span-full { grid-column: 1 / -1; }
+
+/* ── CARDS ── */
+.card {
+    background: var(--card); border-radius: var(--radius); border: 1px solid var(--border);
+    padding: 24px; box-shadow: var(--shadow-sm);
+}
+.card-title { font-size: 12px; font-weight: 600; color: var(--text-2); margin-bottom: 2px; }
+.card-sub { font-size: 11px; color: var(--text-3); margin-bottom: 20px; }
+.chart-area { position: relative; height: 260px; }
+.chart-area.tall { height: 300px; }
+.chart-area.short { height: 200px; }
+
+/* ── KPI MINI ── */
+.kpi-mini {
+    background: var(--card); border-radius: var(--radius); border: 1px solid var(--border);
+    padding: 20px 22px; box-shadow: var(--shadow-sm);
+}
+.kpi-mini-label { font-size: 11px; font-weight: 600; color: var(--text-3); text-transform: uppercase; letter-spacing: 0.6px; margin-bottom: 6px; }
+.kpi-mini-val { font-size: 24px; font-weight: 800; color: var(--text); letter-spacing: -0.5px; line-height: 1; }
+.kpi-mini-sub { font-size: 11px; color: var(--text-3); margin-top: 5px; }
+.kpi-mini-sub .up { color: var(--success); font-weight: 600; }
+
+/* ── NPS ── */
+.nps-hero {
+    background: var(--card); border-radius: var(--radius); border: 1px solid var(--border);
+    padding: 28px 32px; box-shadow: var(--shadow-sm);
+    display: grid; grid-template-columns: 200px 1fr; align-items: center; gap: 36px;
+}
+.nps-gauge-wrap { width: 200px; height: 120px; position: relative; }
+.nps-gauge-wrap canvas { width: 200px !important; height: 120px !important; }
+.nps-center { position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%); text-align: center; }
+.nps-center-val { font-size: 36px; font-weight: 800; color: var(--success); line-height: 1; }
+.nps-center-label { font-size: 10px; color: var(--text-3); font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+.nps-detail h3 { font-size: 15px; font-weight: 700; margin-bottom: 4px; color: var(--text); }
+.nps-detail p { font-size: 13px; color: var(--text-2); margin-bottom: 16px; line-height: 1.5; }
+.nps-metrics { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+.nps-metric { background: var(--bg); border-radius: var(--radius-sm); padding: 14px 16px; text-align: center; }
+.nps-metric-val { font-size: 22px; font-weight: 800; line-height: 1; }
+.nps-metric-val.green { color: var(--success); }
+.nps-metric-val.blue { color: var(--primary-bright); }
+.nps-metric-label { font-size: 10px; font-weight: 600; color: var(--text-3); text-transform: uppercase; letter-spacing: 0.4px; margin-top: 4px; }
+
+/* ── CALLOUTS ── */
+.callout { border-radius: var(--radius); padding: 20px 24px; margin-bottom: 16px; border: 1px solid; }
+.callout.green { background: var(--success-light); border-color: #a7f3d0; }
+.callout.blue { background: var(--primary-light); border-color: #bfdbfe; }
+.callout h4 { font-size: 13px; font-weight: 700; margin-bottom: 10px; color: var(--text); }
+.callout-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; }
+.callout-stat-val { font-size: 22px; font-weight: 800; line-height: 1; }
+.callout.green .callout-stat-val { color: var(--success); }
+.callout.blue .callout-stat-val { color: var(--primary-bright); }
+.callout-stat-label { font-size: 11px; color: var(--text-2); margin-top: 3px; }
+
+/* ── REVENUE BREAKDOWN ── */
+.rev-breakdown {
+    background: var(--primary-light); border: 1px solid #bfdbfe;
+    border-radius: var(--radius); padding: 20px 24px; margin-bottom: 16px;
+}
+.rev-breakdown h4 { font-size: 13px; font-weight: 700; color: var(--text); margin-bottom: 12px; }
+.rev-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; }
+.rev-row + .rev-row { border-top: 1px solid #dbeafe; }
+.rev-row-label { font-size: 13px; color: var(--text-2); }
+.rev-row-val { font-size: 15px; font-weight: 700; color: var(--text); }
+.rev-row.total .rev-row-label { font-weight: 700; color: var(--text); }
+.rev-row.total .rev-row-val { font-size: 17px; color: var(--primary-bright); }
+
+/* ── SLIDER / FORECAST ── */
+.forecast-card {
+    background: var(--card); border-radius: var(--radius); border: 1px solid var(--border);
+    padding: 24px; box-shadow: var(--shadow-sm); margin-bottom: 16px;
+}
+.forecast-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 4px; }
+.forecast-kpis { display: flex; gap: 28px; align-items: baseline; }
+.forecast-kpi-val { font-size: 28px; font-weight: 800; color: var(--primary-bright); letter-spacing: -0.5px; }
+.forecast-kpi-label { font-size: 10px; font-weight: 600; color: var(--text-3); text-transform: uppercase; letter-spacing: 0.5px; margin-top: 2px; }
+.forecast-kpi-sub { font-size: 20px; font-weight: 700; color: var(--success); }
+.slider-wrap { margin: 20px 0 8px; }
+.slider-row { display: flex; align-items: center; gap: 14px; }
+.slider-label-left { font-size: 11px; font-weight: 600; color: var(--text-2); min-width: 110px; }
+input[type="range"] {
+    -webkit-appearance: none; flex: 1; height: 6px; border-radius: 3px;
+    background: linear-gradient(to right, var(--primary-bright), var(--success)); outline: none;
+}
+input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none; width: 22px; height: 22px; border-radius: 50%;
+    background: var(--primary-bright); cursor: pointer; border: 3px solid #fff;
+    box-shadow: 0 1px 6px rgba(0,0,0,0.2);
+}
+input[type="range"]::-moz-range-thumb {
+    width: 22px; height: 22px; border-radius: 50%;
+    background: var(--primary-bright); cursor: pointer; border: 3px solid #fff;
+    box-shadow: 0 1px 6px rgba(0,0,0,0.2);
+}
+.slider-labels { display: flex; justify-content: space-between; font-size: 10px; color: var(--text-3); margin-top: 4px; padding: 0 0 0 124px; }
+.slider-delta {
+    display: inline-flex; align-items: center; gap: 4px;
+    background: var(--success-light); border-radius: 6px;
+    padding: 5px 12px; font-size: 12px; font-weight: 700; color: var(--success);
+}
+
+/* ── FOOTER ── */
+.foot {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 20px 0 0; margin-top: 32px; border-top: 1px solid var(--border);
+    font-size: 11px; color: var(--text-3);
+}
+.foot-logo { height: 18px; opacity: 0.4; }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 900px) {
+    .hero-kpis { grid-template-columns: repeat(2, 1fr); }
+    .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
+    .nps-hero { grid-template-columns: 1fr; }
+    .hero-top { flex-direction: column; gap: 16px; }
+    .tab-nav { flex-direction: column; }
+    .tab-btn:not(:last-child) { border-right: none; border-bottom: 1px solid var(--border); }
+}
+@media print {
+    body { background: #fff; }
+    .card, .kpi-mini, .nps-hero, .forecast-card { box-shadow: none; border: 1px solid #ddd; break-inside: avoid; }
+    .hero { break-inside: avoid; }
+    .section-panel { display: block !important; page-break-before: always; }
+    .tab-nav { display: none; }
+}
+    </style>
+</head>
+<body>
+<div class="page">
+
+    <!-- ════ HERO ════ -->
+    <div class="hero">
+        <div class="hero-top">
+            <div>
+                <div class="hero-brand-row">
+                    <svg class="velocia-logo" viewBox="0 0 220 32" xmlns="http://www.w3.org/2000/svg">
+                        <text x="0" y="26" font-family="Inter, Arial, sans-serif" font-weight="800" font-size="30" fill="#ffffff" letter-spacing="5">VELOCIA</text>
+                        <path d="M195,8 C200,4 208,6 212,10 C216,6 220,4 224,8" stroke="#4a9ec5" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+                        <path d="M198,14 C203,10 210,12 214,16 C218,12 222,10 226,14" stroke="#2d7aa0" stroke-width="2" fill="none" stroke-linecap="round"/>
+                        <path d="M200,19 C205,16 211,17 215,20" stroke="#1a5a7a" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+                    </svg>
+                    <div class="hero-divider"></div>
+                    <span class="hero-brand-text">Transit Rewards Platform</span>
+                </div>
+                <h1>SORTA Program Dashboard</h1>
+                <div class="hero-sub">Cincinnati Metro &middot; Jul 2025 &ndash; Jan 2026</div>
+            </div>
+            <div class="hero-badges">
+                <div class="badge badge-roi">4.8 : 1 ROI</div>
+                <div class="badge badge-cost">$270K Investment</div>
+            </div>
+        </div>
+        <div class="hero-kpis">
+            <div class="hero-kpi">
+                <div class="hero-kpi-val">$1.29M</div>
+                <div class="hero-kpi-label">Net New Fare Revenue</div>
+                <div class="hero-kpi-sub">Lift + new riders &middot; actual</div>
+            </div>
+            <div class="hero-kpi">
+                <div class="hero-kpi-val">586K</div>
+                <div class="hero-kpi-label">Total Net New Trips</div>
+                <div class="hero-kpi-sub">148K lift + 437K new riders</div>
+            </div>
+            <div class="hero-kpi">
+                <div class="hero-kpi-val">9,167</div>
+                <div class="hero-kpi-label">Net New Riders</div>
+                <div class="hero-kpi-sub">Riders who wouldn't have ridden</div>
+            </div>
+            <div class="hero-kpi">
+                <div class="hero-kpi-val">+47</div>
+                <div class="hero-kpi-label">NPS Score</div>
+                <div class="hero-kpi-sub">Avg rating: 8.35 / 10</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ════ TAB NAV ════ -->
+    <div class="tab-nav">
+        <button class="tab-btn active" onclick="showTab(0)" id="tab-0">
+            <span class="tab-num">1</span> Net New Fare Revenue
+        </button>
+        <button class="tab-btn" onclick="showTab(1)" id="tab-1">
+            <span class="tab-num">2</span> New Riders to Transit
+        </button>
+        <button class="tab-btn" onclick="showTab(2)" id="tab-2">
+            <span class="tab-num">3</span> Rider Satisfaction
+        </button>
+    </div>
+
+    <!-- ════════════════════════════════════════════════════════ -->
+    <!-- PANEL 1: NET NEW FARE REVENUE                          -->
+    <!-- ════════════════════════════════════════════════════════ -->
+    <div class="section-panel active" id="panel-0">
+        <div class="section">
+            <div class="section-header">
+                <div class="section-num">1</div>
+                <div class="section-title">Net New Fare Revenue</div>
+                <div class="section-desc">Revenue from new riders + existing riders &middot; Actual Metabase data</div>
+            </div>
+
+            <!-- Revenue Breakdown -->
+            <div class="rev-breakdown">
+                <h4>Fare Revenue Breakdown</h4>
+                <div class="rev-row">
+                    <span class="rev-row-label">Revenue from existing riders</span>
+                    <span class="rev-row-val">$326,659</span>
+                </div>
+                <div class="rev-row">
+                    <span class="rev-row-label">Revenue from net new riders</span>
+                    <span class="rev-row-val">$962,394</span>
+                </div>
+                <div class="rev-row total">
+                    <span class="rev-row-label">Total Net New Fare Revenue</span>
+                    <span class="rev-row-val">$1,289,053</span>
+                </div>
+            </div>
+
+            <!-- Behavior Change -->
+            <div class="callout green">
+                <h4>Existing Rider Behavior Change &mdash; Pre vs. Post Consent</h4>
+                <div class="callout-grid">
+                    <div><div class="callout-stat-val">2.07</div><div class="callout-stat-label">Avg weekly rides before</div></div>
+                    <div><div class="callout-stat-val">4.28</div><div class="callout-stat-label">Avg weekly rides after</div></div>
+                    <div><div class="callout-stat-val">+106%</div><div class="callout-stat-label">Existing rider increase</div></div>
+                    <div><div class="callout-stat-val">78.3%</div><div class="callout-stat-label">Users who increased rides</div></div>
+                </div>
+            </div>
+
+            <!-- Monthly Net New Revenue + Ridership Change -->
+            <div class="grid-2">
+                <div class="card">
+                    <div class="card-title">Monthly Net New Fare Revenue</div>
+                    <div class="card-sub">Existing riders + net new rider revenue &middot; Jul 2025 &ndash; Jan 2026</div>
+                    <div class="chart-area tall"><canvas id="c-revenue"></canvas></div>
+                </div>
+                <div class="card">
+                    <div class="card-title">Ridership Change by Pre-Consent Tier</div>
+                    <div class="card-sub">Avg weekly rides before vs. after &middot; Velocia program impact</div>
+                    <div class="chart-area tall"><canvas id="c-tier-change"></canvas></div>
+                </div>
+            </div>
+
+            <!-- 12-Month Forward Forecast with Slider (NO ROI) -->
+            <div class="forecast-card">
+                <div class="card-title">12-Month Forward Revenue Projection</div>
+                <div class="card-sub">Projected fare revenue &middot; Mar 2026 &ndash; Feb 2027</div>
+                <div class="forecast-header">
+                    <div class="forecast-kpis">
+                        <div>
+                            <div class="forecast-kpi-val" id="fc-total">$2.53M</div>
+                            <div class="forecast-kpi-label">Projected 12-Month Revenue</div>
+                        </div>
+                        <div>
+                            <div class="forecast-kpi-sub" id="fc-monthly">$211K/mo</div>
+                            <div class="forecast-kpi-label">Avg Monthly Revenue</div>
+                        </div>
+                    </div>
+                    <div id="fc-delta" style="display:none">
+                        <div class="slider-delta"><span id="fc-delta-val">+0</span> users added</div>
+                    </div>
+                </div>
+                <div class="slider-wrap">
+                    <div class="slider-row">
+                        <span class="slider-label-left">Consented Users</span>
+                        <input type="range" id="user-slider" min="25000" max="75000" step="5000" value="25000">
+                        <span style="font-size:13px;font-weight:700;color:var(--primary);min-width:55px;text-align:right" id="slider-val">25,000</span>
+                    </div>
+                    <div class="slider-labels">
+                        <span>25K (current)</span>
+                        <span>50K</span>
+                        <span>75K</span>
+                    </div>
+                </div>
+                <div class="chart-area tall"><canvas id="c-forecast"></canvas></div>
+            </div>
+
+            <!-- Revenue Composition -->
+            <div class="grid-2">
+                <div class="card">
+                    <div class="card-title">Revenue Composition</div>
+                    <div class="card-sub">Existing riders vs. net new rider contribution</div>
+                    <div class="chart-area"><canvas id="c-rev-split"></canvas></div>
+                </div>
+                <div class="card">
+                    <div class="card-title">Monthly Incremental Rides</div>
+                    <div class="card-sub">Lift rides (existing) + net new rider rides per month</div>
+                    <div class="chart-area"><canvas id="c-rides-monthly"></canvas></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ════════════════════════════════════════════════════════ -->
+    <!-- PANEL 2: NEW RIDERS TO TRANSIT                         -->
+    <!-- ════════════════════════════════════════════════════════ -->
+    <div class="section-panel" id="panel-1">
+        <div class="section">
+            <div class="section-header">
+                <div class="section-num">2</div>
+                <div class="section-title">New Riders to Transit</div>
+                <div class="section-desc">Acquisition, growth, engagement</div>
+            </div>
+
+            <div class="grid-4">
+                <div class="kpi-mini">
+                    <div class="kpi-mini-label">Net New Riders</div>
+                    <div class="kpi-mini-val">9,167</div>
+                    <div class="kpi-mini-sub">Would not have ridden</div>
+                </div>
+                <div class="kpi-mini">
+                    <div class="kpi-mini-label">Avg Rides / Net New Rider</div>
+                    <div class="kpi-mini-val">47.7</div>
+                    <div class="kpi-mini-sub">13.76 rides / rider / month</div>
+                </div>
+                <div class="kpi-mini">
+                    <div class="kpi-mini-label">Revenue / Rider</div>
+                    <div class="kpi-mini-val">$104.98</div>
+                    <div class="kpi-mini-sub">$15.00 / rider / month</div>
+                </div>
+                <div class="kpi-mini">
+                    <div class="kpi-mini-label">Dormant Transit Riders Returning</div>
+                    <div class="kpi-mini-val">2,146</div>
+                    <div class="kpi-mini-sub">Riders joining rewards and beginning to ride transit again</div>
+                </div>
+            </div>
+
+            <div class="grid-2">
+                <div class="card">
+                    <div class="card-title">Monthly New User Growth</div>
+                    <div class="card-sub">New consenting users per month + cumulative overlay</div>
+                    <div class="chart-area"><canvas id="c-user-growth"></canvas></div>
+                </div>
+                <div class="card">
+                    <div class="card-title">Monthly Active Riders</div>
+                    <div class="card-sub">Unique riders with at least one trip per month</div>
+                    <div class="chart-area"><canvas id="c-active"></canvas></div>
+                </div>
+            </div>
+
+            <!-- Net New Rider Revenue Projection with Slider -->
+            <div class="forecast-card">
+                <div class="card-title">Projected Fare Revenue from Net New Riders</div>
+                <div class="card-sub">Forward 12-month projection based on 9,167 net new riders at $15.00 / rider / month &middot; <span id="nnr-proj-annual">$1.65M</span> projected annual</div>
+                <div class="forecast-header">
+                    <div class="forecast-kpis">
+                        <div>
+                            <div class="forecast-kpi-val" id="nnr-total">$1.65M</div>
+                            <div class="forecast-kpi-label">Projected 12-Month Revenue</div>
+                        </div>
+                        <div>
+                            <div class="forecast-kpi-sub" id="nnr-monthly">$137K/mo</div>
+                            <div class="forecast-kpi-label">Avg Monthly Revenue</div>
+                        </div>
+                    </div>
+                    <div id="nnr-delta" style="display:none">
+                        <div class="slider-delta"><span id="nnr-delta-val">+0</span> riders added</div>
+                    </div>
+                </div>
+                <div class="slider-wrap">
+                    <div class="slider-row">
+                        <span class="slider-label-left">Net New Riders</span>
+                        <input type="range" id="nnr-slider" min="9000" max="30000" step="1000" value="9167">
+                        <span style="font-size:13px;font-weight:700;color:var(--primary);min-width:55px;text-align:right" id="nnr-slider-val">9,167</span>
+                    </div>
+                    <div class="slider-labels">
+                        <span>9K (current)</span>
+                        <span>20K</span>
+                        <span>30K</span>
+                    </div>
+                </div>
+                <div class="chart-area tall"><canvas id="c-rider-revenue"></canvas></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ════════════════════════════════════════════════════════ -->
+    <!-- PANEL 3: RIDER SATISFACTION                            -->
+    <!-- ════════════════════════════════════════════════════════ -->
+    <div class="section-panel" id="panel-2">
+        <div class="section">
+            <div class="section-header">
+                <div class="section-num">3</div>
+                <div class="section-title">Rider Satisfaction</div>
+                <div class="section-desc">NPS, demographics, frequency</div>
+            </div>
+
+            <!-- Simplified NPS Hero -->
+            <div class="nps-hero" style="margin-bottom:16px">
+                <div class="nps-gauge-wrap">
+                    <canvas id="c-nps-gauge"></canvas>
+                    <div class="nps-center">
+                        <div class="nps-center-val">+47</div>
+                        <div class="nps-center-label">NPS Score</div>
+                    </div>
+                </div>
+                <div class="nps-detail">
+                    <h3>Net Promoter Score: +47</h3>
+                    <p>Derived from 12,733 rider ease-of-understanding ratings (1&ndash;10 scale). Scores of 9&ndash;10 are Promoters (65.0%), 7&ndash;8 Passives (17.0%), 1&ndash;6 Detractors (18.0%).</p>
+                    <div class="nps-metrics">
+                        <div class="nps-metric">
+                            <div class="nps-metric-val blue">8.35</div>
+                            <div class="nps-metric-label">Avg Rating (of 10)</div>
+                        </div>
+                        <div class="nps-metric">
+                            <div class="nps-metric-val green">65.0%</div>
+                            <div class="nps-metric-label">Promoters (9&ndash;10)</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid-3">
+                <div class="kpi-mini">
+                    <div class="kpi-mini-label">Survey Respondents</div>
+                    <div class="kpi-mini-val">12,733</div>
+                    <div class="kpi-mini-sub">Ease-of-understanding responses</div>
+                </div>
+                <div class="kpi-mini">
+                    <div class="kpi-mini-label">Daily Riders</div>
+                    <div class="kpi-mini-val">69.7%</div>
+                    <div class="kpi-mini-sub">Ride every day</div>
+                </div>
+                <div class="kpi-mini">
+                    <div class="kpi-mini-label">Transit Dependent</div>
+                    <div class="kpi-mini-val">68.4%</div>
+                    <div class="kpi-mini-sub">No vehicle access</div>
+                </div>
+            </div>
+
+            <div class="grid-2">
+                <div class="card">
+                    <div class="card-title">NPS Distribution (Ease of Understanding)</div>
+                    <div class="card-sub">Detractors 18.0% &middot; Passives 17.0% &middot; Promoters 65.0% &nbsp;|&nbsp; Avg: 8.35 / 10</div>
+                    <div class="chart-area"><canvas id="c-nps-dist"></canvas></div>
+                </div>
+                <div class="card">
+                    <div class="card-title">Ride Frequency</div>
+                    <div class="card-sub">How often respondents use transit</div>
+                    <div class="chart-area"><canvas id="c-frequency"></canvas></div>
+                </div>
+            </div>
+
+            <div class="grid-2">
+                <div class="card">
+                    <div class="card-title">Rider Age Distribution</div>
+                    <div class="card-sub">Survey respondents by age bracket</div>
+                    <div class="chart-area"><canvas id="c-age"></canvas></div>
+                </div>
+                <div class="card">
+                    <div class="card-title">Vehicle Access</div>
+                    <div class="card-sub">Personal vehicle ownership among riders</div>
+                    <div class="chart-area"><canvas id="c-vehicle"></canvas></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <div class="foot">
+        <svg class="foot-logo" viewBox="0 0 180 26" xmlns="http://www.w3.org/2000/svg">
+            <text x="0" y="22" font-family="Inter, Arial, sans-serif" font-weight="800" font-size="24" fill="#94a3b8" letter-spacing="4">VELOCIA</text>
+            <path d="M158,6 C162,3 168,5 171,8 C174,5 178,3 181,6" stroke="#94a3b8" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+            <path d="M160,11 C164,8 169,10 172,13" stroke="#94a3b8" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+        </svg>
+        <span>Data as of Feb 10, 2026 &middot; Confidential &mdash; For Investor Review Only</span>
+    </div>
+</div>
+
+<script>
+// ── DEFAULTS ──
+Chart.defaults.font.family = "'Inter', -apple-system, sans-serif";
+Chart.defaults.font.size = 11;
+Chart.defaults.color = '#94a3b8';
+Chart.defaults.plugins.legend.labels.usePointStyle = true;
+Chart.defaults.plugins.legend.labels.padding = 14;
+Chart.defaults.plugins.legend.labels.font = { size: 11, weight: '500' };
+Chart.defaults.plugins.tooltip.backgroundColor = '#0f172a';
+Chart.defaults.plugins.tooltip.cornerRadius = 8;
+Chart.defaults.plugins.tooltip.titleFont = { weight: '600', size: 12 };
+Chart.defaults.plugins.tooltip.bodyFont = { size: 11 };
+Chart.defaults.plugins.tooltip.padding = { top: 10, bottom: 10, left: 14, right: 14 };
+Chart.defaults.elements.bar.borderRadius = 4;
+Chart.defaults.elements.bar.borderWidth = 0;
+
+const C = { blue:'#2563eb', sky:'#0ea5e9', green:'#059669', emerald:'#34d399', orange:'#d97706', red:'#dc2626', purple:'#7c3aed', teal:'#0d9488', slate:'#64748b', indigo:'#4f46e5', navy:'#1a3a6b' };
+const P = ['#2563eb','#059669','#d97706','#dc2626','#7c3aed','#0d9488','#4f46e5','#ea580c','#0891b2'];
+
+function fmt$(v) { return v >= 1e6 ? '$'+(v/1e6).toFixed(2)+'M' : v >= 1e3 ? '$'+(v/1e3).toFixed(0)+'K' : '$'+v.toFixed(0); }
+function fmtN(v) { return v >= 1e6 ? (v/1e6).toFixed(1)+'M' : v >= 1e3 ? (v/1e3).toFixed(1)+'K' : v.toLocaleString(); }
+
+// ── DATA (FROM CSVs, NO FEBRUARY) ──
+const MONTHS_FULL = ['Jul 25','Aug 25','Sep 25','Oct 25','Nov 25','Dec 25','Jan 26'];
+
+// Monthly existing rider lift revenue (rides × $2.20, floored)
+const LIFT_REV_M = [7253, 53339, 63351, 57035, 45476, 53422, 46783];
+
+// Monthly net new rider revenue (net_new_rides × $2.20, floored)
+const NN_REV_M = [88237, 185911, 176215, 149349, 121899, 125171, 115612];
+
+// Monthly net new rides (from net_new_rides.csv)
+const NN_RIDES_M = [40108, 84505, 80098, 67886, 55409, 56896, 52551];
+
+// Combined monthly net new revenue
+const FULL_REV = LIFT_REV_M.map((v, i) => v + NN_REV_M[i]);
+
+// Ridership change by pre-consent tier (from Metabase, excl. 6-10 and 10+)
+const TIER_LABELS = ['Inactive (0)', 'Light (0\u20132)', 'Moderate (2\u20134)', 'Regular (4\u20136)'];
+const TIER_PRE  = [0.00, 1.19, 2.94, 4.84];
+const TIER_POST = [3.44, 3.61, 4.78, 6.33];
+const TIER_LIFT = ['\u221E', '+203%', '+63%', '+31%'];
+
+// Revenue constants
+const LIFT_REV = LIFT_REV_M.reduce((a, b) => a + b, 0); // 326,659
+const NET_NEW_RIDER_REV = NN_REV_M.reduce((a, b) => a + b, 0); // 962,394
+const TOTAL_NET_NEW = LIFT_REV + NET_NEW_RIDER_REV; // 1,289,053
+
+// User growth (through Jan, no Feb)
+const CON_M = ['Dec 24','Jan 25','Feb 25','Mar 25','Apr 25','May 25','Jun 25','Jul 25','Aug 25','Sep 25','Oct 25','Nov 25','Dec 25','Jan 26'];
+const NEW_U = [4735, 2131, 1500, 2154, 2419, 1076, 2117, 1558, 1435, 1219, 1074, 1028, 800, 1264];
+const CUM_U = [4735, 6866, 8366, 10520, 12939, 14015, 16132, 17690, 19125, 20344, 21418, 22446, 23246, 24510];
+const ACT_R = [7413, 9731, 11008, 11995, 11495, 11800, 11554]; // scaled, Jul-Jan only
+
+const FREQ_L = ['Daily (69.7%)','1-2x/week (22.5%)','Rarely (5.6%)','Never (1.9%)'];
+const FREQ_V = [10356, 3344, 826, 283];
+const AGE_L = ['\u226420','21-24','25-40','41-55','56-66'];
+const AGE_V = [5016, 2643, 4037, 1869, 659];
+const VEH_V = [10152, 4702];
+const EASE_V = [280, 310, 350, 400, 480, 472, 980, 1185, 1580, 6696];
+
+// Forecast constants
+const BASE_MONTHLY = Math.round((FULL_REV[4] + FULL_REV[5] + FULL_REV[6]) / 3); // Nov-Jan avg ~218K
+const PROJ_MONTHS = ['Mar 26','Apr 26','May 26','Jun 26','Jul 26','Aug 26','Sep 26','Oct 26','Nov 26','Dec 26','Jan 27','Feb 27'];
+
+// ── TAB SWITCHING ──
+const chartInstances = {};
+let chartsInitialized = { 0: false, 1: false, 2: false };
+
+function showTab(idx) {
+    document.querySelectorAll('.tab-btn').forEach((b, i) => b.classList.toggle('active', i === idx));
+    document.querySelectorAll('.section-panel').forEach((p, i) => p.classList.toggle('active', i === idx));
+    if (!chartsInitialized[idx]) { initCharts(idx); chartsInitialized[idx] = true; }
+    else { Object.keys(chartInstances).forEach(k => { if (k.startsWith('t'+idx+'_')) chartInstances[k].resize(); }); }
+}
+function initCharts(t) { [initRevenue, initRiders, initSatisfaction][t](); }
+
+// ══════════════════════════════════
+// TAB 1: NET NEW FARE REVENUE
+// ══════════════════════════════════
+function initRevenue() {
+    // Stacked bar: Lift revenue + Net New Rider revenue per month
+    chartInstances['t0_rev'] = new Chart(document.getElementById('c-revenue'), {
+        type: 'bar',
+        data: {
+            labels: MONTHS_FULL,
+            datasets: [
+                { label: 'Net New Riders', data: NN_REV_M, backgroundColor: C.green+'CC' },
+                { label: 'Existing Riders', data: LIFT_REV_M, backgroundColor: C.navy }
+            ]
+        },
+        options: {
+            responsive: true, maintainAspectRatio: false,
+            plugins: {
+                legend: { position: 'top' },
+                tooltip: { callbacks: {
+                    label: ctx => ctx.dataset.label + ': ' + fmt$(ctx.parsed.y),
+                    footer: items => 'Total: ' + fmt$(items.reduce((s,i) => s + i.parsed.y, 0))
+                }}
+            },
+            scales: {
+                x: { stacked: true, grid: { display: false } },
+                y: { stacked: true, beginAtZero: true, ticks: { callback: v => fmt$(v) }, grid: { color: '#f1f5f9' } }
+            }
+        }
+    });
+
+    // Ridership change by pre-consent tier (horizontal grouped bar)
+    chartInstances['t0_tier'] = new Chart(document.getElementById('c-tier-change'), {
+        type: 'bar',
+        data: {
+            labels: TIER_LABELS,
+            datasets: [
+                { label: 'Pre-Consent', data: TIER_PRE, backgroundColor: C.slate+'88', barPercentage: 0.6, categoryPercentage: 0.7 },
+                { label: 'Post-Consent', data: TIER_POST, backgroundColor: C.green, barPercentage: 0.6, categoryPercentage: 0.7 }
+            ]
+        },
+        options: {
+            indexAxis: 'y', responsive: true, maintainAspectRatio: false,
+            plugins: {
+                legend: { position: 'top' },
+                tooltip: { callbacks: { label: ctx => ctx.dataset.label + ': ' + ctx.parsed.x.toFixed(2) + ' rides/wk' } }
+            },
+            scales: {
+                x: { beginAtZero: true, title: { display: true, text: 'Avg Weekly Rides', font: { size: 10, weight: '600' }, color: '#94a3b8' }, grid: { color: '#f1f5f9' } },
+                y: { grid: { display: false } }
+            }
+        }
+    });
+
+    // 12-month forward forecast (interactive, NO ROI)
+    const initData = PROJ_MONTHS.map((_, i) => BASE_MONTHLY * (1 + 0.015 * (i + 1)));
+    chartInstances['t0_fc'] = new Chart(document.getElementById('c-forecast'), {
+        type: 'bar',
+        data: {
+            labels: PROJ_MONTHS,
+            datasets: [{
+                label: 'Projected Monthly Revenue',
+                data: [...initData],
+                backgroundColor: PROJ_MONTHS.map((_, i) => i < 6 ? C.navy : C.navy+'CC'),
+                borderRadius: 4,
+            }]
+        },
+        options: {
+            responsive: true, maintainAspectRatio: false,
+            plugins: {
+                legend: { display: false },
+                tooltip: { callbacks: { label: ctx => fmt$(ctx.parsed.y) + ' / month' } }
+            },
+            scales: {
+                x: { grid: { display: false } },
+                y: { beginAtZero: true, ticks: { callback: v => fmt$(v) }, grid: { color: '#f1f5f9' } }
+            }
+        }
+    });
+
+    // Update initial forecast KPIs
+    const initTotal = initData.reduce((a, b) => a + b, 0);
+    document.getElementById('fc-total').textContent = fmt$(initTotal);
+    document.getElementById('fc-monthly').textContent = fmt$(initTotal / 12) + '/mo';
+
+    // Slider interaction (NO ROI)
+    const slider = document.getElementById('user-slider');
+    slider.addEventListener('input', function() {
+        const users = +this.value;
+        const scale = users / 25000;
+        const newData = PROJ_MONTHS.map((_, i) => BASE_MONTHLY * scale * (1 + 0.015 * (i + 1)));
+        const chart = chartInstances['t0_fc'];
+        chart.data.datasets[0].data = newData;
+        chart.update('none');
+        const total = newData.reduce((a, b) => a + b, 0);
+        document.getElementById('fc-total').textContent = fmt$(total);
+        document.getElementById('fc-monthly').textContent = fmt$(total / 12) + '/mo';
+        document.getElementById('slider-val').textContent = users.toLocaleString();
+        const delta = users - 25000;
+        const deltaEl = document.getElementById('fc-delta');
+        if (delta > 0) {
+            deltaEl.style.display = 'block';
+            document.getElementById('fc-delta-val').textContent = '+' + delta.toLocaleString();
+        } else {
+            deltaEl.style.display = 'none';
+        }
+    });
+
+    // Revenue composition: Lift vs New Riders
+    chartInstances['t0_split'] = new Chart(document.getElementById('c-rev-split'), {
+        type: 'doughnut',
+        data: {
+            labels: ['Existing Riders ($' + Math.round(LIFT_REV/1000) + 'K)', 'Net New Riders ($' + Math.round(NET_NEW_RIDER_REV/1000) + 'K)'],
+            datasets: [{ data: [LIFT_REV, NET_NEW_RIDER_REV], backgroundColor: [C.navy, C.green], borderColor: '#fff', borderWidth: 3 }]
+        },
+        options: {
+            responsive: true, maintainAspectRatio: false, cutout: '68%',
+            plugins: {
+                legend: { position: 'bottom' },
+                tooltip: { callbacks: { label: ctx => { const t = ctx.dataset.data.reduce((a,b) => a+b, 0); return fmt$(ctx.parsed) + ' (' + ((ctx.parsed/t)*100).toFixed(1) + '%)'; } } }
+            }
+        }
+    });
+
+    // Monthly incremental rides (lift + net new)
+    const liftRides = [3297, 24245, 28796, 25925, 20671, 24283, 21265];
+    chartInstances['t0_rides'] = new Chart(document.getElementById('c-rides-monthly'), {
+        type: 'bar',
+        data: {
+            labels: MONTHS_FULL,
+            datasets: [
+                { label: 'Net New Rides', data: NN_RIDES_M, backgroundColor: C.green+'CC' },
+                { label: 'Lift Rides', data: liftRides, backgroundColor: C.navy }
+            ]
+        },
+        options: {
+            responsive: true, maintainAspectRatio: false,
+            plugins: {
+                legend: { position: 'bottom' },
+                tooltip: { callbacks: {
+                    label: ctx => ctx.dataset.label + ': ' + fmtN(ctx.parsed.y),
+                    footer: items => 'Total: ' + fmtN(items.reduce((s,i) => s + i.parsed.y, 0))
+                }}
+            },
+            scales: {
+                x: { stacked: true, grid: { display: false } },
+                y: { stacked: true, beginAtZero: true, ticks: { callback: v => fmtN(v) }, grid: { color: '#f1f5f9' } }
+            }
+        }
+    });
+}
+
+// ══════════════════════════════════
+// TAB 2: NEW RIDERS TO TRANSIT
+// ══════════════════════════════════
+function initRiders() {
+    // User growth combo (through Jan, no Feb)
+    chartInstances['t1_grow'] = new Chart(document.getElementById('c-user-growth'), {
+        type: 'bar',
+        data: {
+            labels: CON_M,
+            datasets: [
+                { label: 'New Users', data: NEW_U, backgroundColor: C.navy+'CC', order: 2 },
+                { label: 'Cumulative', data: CUM_U, type: 'line', borderColor: C.green, backgroundColor: C.green+'10', borderWidth: 2.5, fill: true, tension: 0.3, pointRadius: 2.5, pointHoverRadius: 5, order: 1, yAxisID: 'y1' }
+            ]
+        },
+        options: {
+            responsive: true, maintainAspectRatio: false,
+            plugins: { legend: { position: 'top' }, tooltip: { callbacks: { label: ctx => ctx.dataset.label + ': ' + fmtN(ctx.parsed.y) } } },
+            scales: {
+                x: { grid: { display: false }, ticks: { maxRotation: 45 } },
+                y: { beginAtZero: true, ticks: { callback: v => fmtN(v) }, grid: { color: '#f1f5f9' }, title: { display: true, text: 'New', font: { size: 10 } } },
+                y1: { beginAtZero: true, position: 'right', ticks: { callback: v => fmtN(v) }, grid: { display: false }, title: { display: true, text: 'Total', font: { size: 10 } } }
+            }
+        }
+    });
+
+    // Monthly active riders (Jul-Jan, no Feb, no partial month marker)
+    chartInstances['t1_active'] = new Chart(document.getElementById('c-active'), {
+        type: 'line',
+        data: {
+            labels: MONTHS_FULL,
+            datasets: [{
+                label: 'Active Riders', data: ACT_R,
+                borderColor: C.indigo, backgroundColor: C.indigo+'12',
+                borderWidth: 2.5, fill: true, tension: 0.35,
+                pointRadius: 4, pointBackgroundColor: '#fff',
+                pointBorderColor: C.indigo, pointBorderWidth: 2, pointHoverRadius: 6
+            }]
+        },
+        options: {
+            responsive: true, maintainAspectRatio: false,
+            plugins: {
+                legend: { display: false },
+                tooltip: { callbacks: { label: ctx => fmtN(ctx.parsed.y) + ' riders' } }
+            },
+            scales: {
+                x: { grid: { display: false } },
+                y: { beginAtZero: false, ticks: { callback: v => fmtN(v) }, grid: { color: '#f1f5f9' } }
+            }
+        }
+    });
+
+    // Net new rider revenue forward projection (Nov-Jan avg from CSV)
+    const nnrBase = Math.round((NN_REV_M[4] + NN_REV_M[5] + NN_REV_M[6]) / 3);
+    const NNR_BASE_RIDERS = 9167;
+
+    function buildNnrData(riderCount) {
+        const scale = riderCount / NNR_BASE_RIDERS;
+        const proj = PROJ_MONTHS.map((_, i) => Math.round(nnrBase * scale * (1 + 0.02 * (i + 1))));
+        const cum = [];
+        proj.reduce((acc, v) => { acc += v; cum.push(acc); return acc; }, 0);
+        return { proj, cum };
+    }
+
+    const initNnr = buildNnrData(NNR_BASE_RIDERS);
+
+    chartInstances['t1_nnr'] = new Chart(document.getElementById('c-rider-revenue'), {
+        type: 'bar',
+        data: {
+            labels: PROJ_MONTHS,
+            datasets: [
+                { label: 'Monthly Revenue', data: initNnr.proj, backgroundColor: C.green+'CC', order: 2 },
+                { label: 'Cumulative', data: initNnr.cum, type: 'line', borderColor: C.navy, backgroundColor: C.navy+'08', borderWidth: 2.5, fill: true, tension: 0.3, pointRadius: 2.5, order: 1, yAxisID: 'y1' }
+            ]
+        },
+        options: {
+            responsive: true, maintainAspectRatio: false,
+            plugins: {
+                legend: { position: 'top' },
+                tooltip: { callbacks: { label: ctx => ctx.dataset.label + ': ' + fmt$(ctx.parsed.y) } }
+            },
+            scales: {
+                x: { grid: { display: false } },
+                y: { beginAtZero: true, ticks: { callback: v => fmt$(v) }, grid: { color: '#f1f5f9' }, title: { display: true, text: 'Monthly', font: { size: 10 } } },
+                y1: { beginAtZero: true, position: 'right', ticks: { callback: v => fmt$(v) }, grid: { display: false }, title: { display: true, text: 'Cumulative', font: { size: 10 } } }
+            }
+        }
+    });
+
+    // Update initial KPIs
+    const initNnrTotal = initNnr.proj.reduce((a, b) => a + b, 0);
+    document.getElementById('nnr-total').textContent = fmt$(initNnrTotal);
+    document.getElementById('nnr-monthly').textContent = fmt$(initNnrTotal / 12) + '/mo';
+
+    // Slider interaction for net new rider projection
+    const nnrSlider = document.getElementById('nnr-slider');
+    nnrSlider.addEventListener('input', function() {
+        const riders = +this.value;
+        const d = buildNnrData(riders);
+        const chart = chartInstances['t1_nnr'];
+        chart.data.datasets[0].data = d.proj;
+        chart.data.datasets[1].data = d.cum;
+        chart.update('none');
+        const total = d.proj.reduce((a, b) => a + b, 0);
+        document.getElementById('nnr-total').textContent = fmt$(total);
+        document.getElementById('nnr-monthly').textContent = fmt$(total / 12) + '/mo';
+        document.getElementById('nnr-slider-val').textContent = riders.toLocaleString();
+        document.getElementById('nnr-proj-annual').textContent = fmt$(total);
+        const delta = riders - NNR_BASE_RIDERS;
+        const deltaEl = document.getElementById('nnr-delta');
+        if (delta > 0) {
+            deltaEl.style.display = 'block';
+            document.getElementById('nnr-delta-val').textContent = '+' + delta.toLocaleString();
+        } else {
+            deltaEl.style.display = 'none';
+        }
+    });
+}
+
+// ══════════════════════════════════
+// TAB 3: RIDER SATISFACTION
+// ══════════════════════════════════
+function initSatisfaction() {
+    // NPS Gauge
+    chartInstances['t2_gauge'] = new Chart(document.getElementById('c-nps-gauge'), {
+        type: 'doughnut',
+        data: {
+            labels: ['NPS +47', 'Remaining'],
+            datasets: [{ data: [84, 16], backgroundColor: [C.green, '#e2e8f0'], borderWidth: 0 }]
+        },
+        options: {
+            responsive: true, maintainAspectRatio: false,
+            rotation: -90, circumference: 180, cutout: '80%',
+            plugins: { legend: { display: false }, tooltip: { enabled: false } }
+        }
+    });
+
+    // NPS Distribution
+    chartInstances['t2_dist'] = new Chart(document.getElementById('c-nps-dist'), {
+        type: 'bar',
+        data: {
+            labels: ['1','2','3','4','5','6','7','8','9','10'],
+            datasets: [{ data: EASE_V, backgroundColor: EASE_V.map((_,i) => i <= 5 ? C.red+'AA' : i <= 7 ? C.orange+'BB' : C.green+'DD') }]
+        },
+        options: {
+            responsive: true, maintainAspectRatio: false,
+            plugins: {
+                legend: { display: false },
+                tooltip: { callbacks: { label: ctx => {
+                    const cat = ctx.dataIndex <= 5 ? 'Detractor' : ctx.dataIndex <= 7 ? 'Passive' : 'Promoter';
+                    return fmtN(ctx.parsed.y) + ' respondents (' + cat + ')';
+                }}}
+            },
+            scales: {
+                x: { grid: { display: false }, title: { display: true, text: 'Detractors (1-6)          Passives (7-8)          Promoters (9-10)', font: { size: 10, weight: '600' }, color: '#94a3b8' } },
+                y: { beginAtZero: true, ticks: { callback: v => fmtN(v) }, grid: { color: '#f1f5f9' } }
+            }
+        }
+    });
+
+    // Frequency
+    chartInstances['t2_freq'] = new Chart(document.getElementById('c-frequency'), {
+        type: 'doughnut',
+        data: {
+            labels: FREQ_L,
+            datasets: [{ data: FREQ_V, backgroundColor: [C.navy, C.teal, C.orange+'CC', C.slate+'88'], borderColor: '#fff', borderWidth: 3 }]
+        },
+        options: {
+            responsive: true, maintainAspectRatio: false, cutout: '62%',
+            plugins: { legend: { position: 'bottom', labels: { font: { size: 10 } } }, tooltip: { callbacks: { label: ctx => fmtN(ctx.parsed) + ' respondents' } } }
+        }
+    });
+
+    // Age
+    chartInstances['t2_age'] = new Chart(document.getElementById('c-age'), {
+        type: 'bar',
+        data: { labels: AGE_L, datasets: [{ data: AGE_V, backgroundColor: P.slice(0,5) }] },
+        options: {
+            responsive: true, maintainAspectRatio: false,
+            plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => fmtN(ctx.parsed.y) + ' respondents' } } },
+            scales: { x: { grid: { display: false } }, y: { beginAtZero: true, ticks: { callback: v => fmtN(v) }, grid: { color: '#f1f5f9' } } }
+        }
+    });
+
+    // Vehicle
+    chartInstances['t2_veh'] = new Chart(document.getElementById('c-vehicle'), {
+        type: 'doughnut',
+        data: {
+            labels: ['No Vehicle (68.4%)', 'Has Vehicle (31.6%)'],
+            datasets: [{ data: VEH_V, backgroundColor: [C.orange, C.teal], borderColor: '#fff', borderWidth: 3 }]
+        },
+        options: {
+            responsive: true, maintainAspectRatio: false, cutout: '62%',
+            plugins: { legend: { position: 'bottom', labels: { font: { size: 10 } } }, tooltip: { callbacks: { label: ctx => fmtN(ctx.parsed) + ' respondents' } } }
+        }
+    });
+}
+
+// Init first tab
+initCharts(0);
+chartsInitialized[0] = true;
+</script>
+</body>
+</html>
