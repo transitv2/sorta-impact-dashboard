@@ -69,7 +69,7 @@ body {
     gap: 14px;
     margin-bottom: 12px;
 }
-.velocia-logo { height: 28px; opacity: 0.95; }
+.velocia-logo { height: 34px; opacity: 0.95; filter: brightness(0) invert(1); }
 .hero-divider { width: 1px; height: 24px; background: rgba(255,255,255,0.2); }
 .hero-brand-text {
     font-size: 11px; font-weight: 600; text-transform: uppercase;
@@ -240,7 +240,7 @@ input[type="range"]::-moz-range-thumb {
     padding: 20px 0 0; margin-top: 32px; border-top: 1px solid var(--border);
     font-size: 11px; color: var(--text-3);
 }
-.foot-logo { height: 18px; opacity: 0.4; }
+.foot-logo { height: 18px; opacity: 0.4; filter: brightness(0) invert(1); }
 
 /* ── RESPONSIVE ── */
 @media (max-width: 900px) {
@@ -268,12 +268,7 @@ input[type="range"]::-moz-range-thumb {
         <div class="hero-top">
             <div>
                 <div class="hero-brand-row">
-                    <svg class="velocia-logo" viewBox="0 0 220 32" xmlns="http://www.w3.org/2000/svg">
-                        <text x="0" y="26" font-family="Inter, Arial, sans-serif" font-weight="800" font-size="30" fill="#ffffff" letter-spacing="5">VELOCIA</text>
-                        <path d="M195,8 C200,4 208,6 212,10 C216,6 220,4 224,8" stroke="#4a9ec5" stroke-width="2.5" fill="none" stroke-linecap="round"/>
-                        <path d="M198,14 C203,10 210,12 214,16 C218,12 222,10 226,14" stroke="#2d7aa0" stroke-width="2" fill="none" stroke-linecap="round"/>
-                        <path d="M200,19 C205,16 211,17 215,20" stroke="#1a5a7a" stroke-width="1.5" fill="none" stroke-linecap="round"/>
-                    </svg>
+                    <img class="velocia-logo" src="https://velocia.io/wp-content/uploads/2024/01/velocia-logo-blue.svg" alt="Velocia">
                     <div class="hero-divider"></div>
                     <span class="hero-brand-text">Transit Rewards Platform</span>
                 </div>
@@ -592,11 +587,7 @@ input[type="range"]::-moz-range-thumb {
 
     <!-- FOOTER -->
     <div class="foot">
-        <svg class="foot-logo" viewBox="0 0 180 26" xmlns="http://www.w3.org/2000/svg">
-            <text x="0" y="22" font-family="Inter, Arial, sans-serif" font-weight="800" font-size="24" fill="#94a3b8" letter-spacing="4">VELOCIA</text>
-            <path d="M158,6 C162,3 168,5 171,8 C174,5 178,3 181,6" stroke="#94a3b8" stroke-width="1.5" fill="none" stroke-linecap="round"/>
-            <path d="M160,11 C164,8 169,10 172,13" stroke="#94a3b8" stroke-width="1.2" fill="none" stroke-linecap="round"/>
-        </svg>
+        <img class="foot-logo" src="https://velocia.io/wp-content/uploads/2024/01/velocia-logo-blue.svg" alt="Velocia">
         <span>Data as of Feb 10, 2026 &middot; Confidential &mdash; For Investor Review Only</span>
     </div>
 </div>
